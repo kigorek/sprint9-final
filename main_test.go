@@ -22,7 +22,6 @@ func TestGenerateRandomElements(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := generateRandomElements(tt.size)
-
 			assert.Equal(t, tt.expected, len(result), "slice length wrong")
 			if tt.size > 0 {
 				for i, val := range result {
