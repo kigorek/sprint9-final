@@ -12,7 +12,7 @@ const (
 	CHUNKS = 8
 )
 
-// generateRandomElements generates random positive integers.
+// generateRandomElements generates random elements.
 func generateRandomElements(size int) []int {
 	if size <= 0 {
 		return nil
