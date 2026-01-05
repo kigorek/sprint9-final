@@ -15,7 +15,7 @@ const (
 // generateRandomElements generates random positive integers.
 func generateRandomElements(size int) []int {
 	if size <= 0 {
-		return []int{}
+		return nil
 	}
 
 	source := rand.NewSource(time.Now().UnixNano())
@@ -70,28 +70,20 @@ func maxChunks(data []int) int {
 	wg.Add(CHUNKS)
 
 	for i := 0; i < CHUNKS; i++ {
-		go func(chunkIndex int) {
+		start := i * chunkSize
+		end := start + chunkSize
+
+		if i == CHUNKS-1 {
+			end = len(data)
+		}
+
+		chunk := data[start:end]
+
+		go func(chunk []int, chunkIndex int) {
 			defer wg.Done()
-			start := chunkIndex * chunkSize
-			end := start + chunkSize
 
-			if chunkIndex == CHUNKS-1 {
-				end = len(data)
-			}
-			chunk := data[start:end]
-
-			if len(chunk) > 0 {
-				chunkMax := chunk[0]
-				for j := 1; j < len(chunk); j++ {
-					if chunk[j] > chunkMax {
-						chunkMax = chunk[j]
-					}
-				}
-				maxValues[chunkIndex] = chunkMax
-			} else {
-				maxValues[chunkIndex] = 0
-			}
-		}(i)
+			maxValues[chunkIndex] = maximum(chunk)
+		}(chunk, i)
 	}
 	wg.Wait()
 

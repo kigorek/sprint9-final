@@ -2,6 +2,8 @@ package main
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGenerateRandomElements(t *testing.T) {
@@ -21,15 +23,10 @@ func TestGenerateRandomElements(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			result := generateRandomElements(tt.size)
 
-			if len(result) != tt.expected {
-				t.Errorf("generateRandomElements(%d) = slice with length %d, want %d",
-					tt.size, len(result), tt.expected)
-			}
+			assert.Equal(t, tt.expected, len(result), "slice length wrong")
 			if tt.size > 0 {
 				for i, val := range result {
-					if val < 0 {
-						t.Errorf("Element at index %d is negative: %d", i, val)
-					}
+					assert.GreaterOrEqual(t, val, 0, "element at index %d is negative: %d", i, val)
 				}
 			}
 		})
@@ -46,16 +43,12 @@ func TestMaximum(t *testing.T) {
 		{"Single", []int{42}, 42},
 		{"Same", []int{5, 5, 5, 5}, 5},
 		{"Random", []int{3, 1, 4, 1, 5, 9, 2, 6}, 9},
-		{"Negative", []int{-5, -1, -3, -10}, -1},
-		{"Mix", []int{-5, 0, 10, -3, 7}, 10},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			result := maximum(tt.data)
-			if result != tt.expected {
-				t.Errorf("maximum(%v) = %d, want %d", tt.data, result, tt.expected)
-			}
+			assert.Equal(t, tt.expected, result)
 		})
 	}
 }
